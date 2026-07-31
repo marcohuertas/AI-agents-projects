@@ -51,5 +51,6 @@ The validation was performed by randomly selecting one of the "positive" queries
 
 #### Jupyter Notebooks
  - Data generation
+   - `creating_biomodels_dataset.ipynb` (initial pull from BioModels)
  - Agentic RAG
  
