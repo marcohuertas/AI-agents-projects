@@ -28,26 +28,37 @@ The Agentic RAG is build using HuggingFace's smolagents framework. A vector stor
 The language model used for the agent is ```Qwen/Qwen2.5-72B-Instruct``` and is run using Hugging Face's inference api.
 
 #### Performance
-The Agentic RAG performance was evaluated by grading the retrieval of models based on manually prepared queries. These queries focused on 3 broad categories of models
+The Agentic RAG performance was evaluated by grading the retrieval of models based on manually crafted queries to retrieve specific model ids. These queries focused on 5 broad categories
  - CAR (chimeric antigen receptor)
  - Interleukin
  - Breast Cancer
+ - Pancreatic cancer
+ - Leukemia
    
-For each of these categories, 4 or 5 queries were prepared based on specific model descriptions, such that each query would produce a specific model, including at least one "negative" query for which there were a set of models that the Agent should not be retrieve.
+For each of these categories, 4 or 5 queries were prepared based on specific model descriptions, such that for each "positive" query a specific model id was expected, and for a "negative" query a set of models that the Agent should not be retrieve.
 
 For each query a system of 4 points was designed, where one point is given if the agent successfully
- 1. retrieves the correct model
- 2. provides the corresponding PMCID (a unique reference number or identifier that is assigned to every article that is accepted into PubMed Central)
+ 1. retrieves the expected model id
+ 2. provides the corresponding PMCID (a unique reference number or identifier that is assigned to every article that is accepted into PubMed Central) if there is one or indicates the absence of it
  3. retrieves the equations of the model (in Tellurium/Antimony code)
- 4. retrieves a model description that does not form part of a set of models for the negative query 
+ 4. retrieves a model id different from a set of model ids not expected when the negative query is ran 
 
-The validation was performed by randomly selecting one of the "positive" queries and one of the "negative" queries for each category and then grade the performance of the model using the above system. The results are 
+The validation was performed by randomly selecting one of the "positive" queries and one of the "negative" queries for each category and then grade the performance of the model using the above system. A perfect score is 20.
+
+The results are in the following table
 
 | Category | BioModel Id | PMCID | Equations Provided | Excluded BioModels | Total | Notes positive query | Notes negative query |
 |----------|-------------|------|--------------------|--------------------|-------|----------------------|----------------------|
 | CAR | 1 | 1 | 1 | 1 | 4 | | | 
 | Interleukin |1|1|1|1|4|There is no PMDIC for this model. Reported correctly.|There is no PMDIC for this model, which is correct. Agent provided the accession number.|
 |Breast cancer|1|1|1|1|4|There is no PMCID for this model, which the model indicated correctly.|The return model description is not part of the excluded models. PMCID was reported.|
+|Pancreatic cancer | 1 | 0 | 0 | 0 | 1 | There is no PMCID but the agent did not report it. | Agent returned one of the models that were not expected.|
+| Leukemia | 1 | 1 | 1 | 0 | 3 | Reported correctly that no PMCID was available.| Agent returns the same model as for positive query.|
+| | | | | Final score | 16/20 (0.8%) | | |
+
+| Final score |
+|-------------|
+| 16 out of 20 points.|
 
 #### Jupyter Notebooks
  - Data generation
